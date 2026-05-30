@@ -58,3 +58,10 @@ http://localhost:3000
 - Muốn nạp sách mới: chạy pipeline build/index ở backend như cũ, sau đó refresh frontend.
 - Nếu frontend báo không kết nối được Python API, kiểm tra backend API đã chạy ở port `8000` chưa.
 - Nếu backend báo lỗi Neo4j, kiểm tra Neo4j Desktop, mật khẩu và biến môi trường trong `.env`.
+## Công nghệ sử dụng
+
+- Frontend: React, Vite, TypeScript
+- Backend: Python FastAPI
+- Database/Graph: Neo4j
+- LLM: Gemini API
+- Retrieval: GraphRAG, vector search, graph expansion
