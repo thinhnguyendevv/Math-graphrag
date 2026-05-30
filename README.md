@@ -37,7 +37,7 @@ Kiểm tra nhanh:
 http://127.0.0.1:8000/api/health
 ```
 
-## 3. Chạy frontend theme trắng
+## 3. Chạy frontend
 
 Mở terminal khác, trong thư mục `frontend`:
 
