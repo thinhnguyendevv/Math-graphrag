@@ -1,0 +1,87 @@
+project:
+  name: math_graphrag_langchain
+  book_name: "Giải tích 12"
+
+paths:
+  pdf_dir: data/pdf
+  raw_md_dir: data/md_raw
+  clean_md_dir: data/md_clean
+  output_dir: data/output
+
+preprocess:
+  keep_page_markers: true
+  remove_image_links: false
+  fix_common_ocr_errors: true
+
+chunking:
+  mode: hybrid
+  max_chars: 1400
+  soft_max_chars: 1200
+  overlap_chars: 180
+  min_chars: 150
+  keep_heading_context: true
+
+extraction:
+  # batch_size > 1 để LLM nhìn nhiều chunk gần nhau và tạo thêm cross_chunk_relationships.
+  # Nếu API chậm hoặc output JSON hay lỗi, giảm về 1.
+  batch_size: 4
+  max_retries: 2
+  rule_fallback: true
+  save_jsonl: data/output/extractions.jsonl
+
+neo4j:
+  uri_env: NEO4J_URI
+  user_env: NEO4J_USER
+  password_env: NEO4J_PASSWORD
+  database: neo4j
+  reset_before_index: false
+  chunk_vector_index: chunk_embedding_index
+  entity_vector_index: entity_embedding_index
+  community_vector_index: community_embedding_index
+  fulltext_index: chunk_fulltext_index
+  entity_fulltext_index: entity_fulltext_index
+
+llm:
+  provider_env: LLM_PROVIDER
+  provider: gemini
+  temperature: 0.1
+  gemini:
+    model: gemini-2.5-flash
+    api_key_env: GOOGLE_API_KEY
+  hf:
+    model_name: Qwen/Qwen2.5-1.5B-Instruct
+    device: auto
+    max_new_tokens: 2048
+
+embedding:
+  provider: hf
+  dimension: 1024
+  hf:
+    model_name: BAAI/bge-m3
+    normalize_embeddings: true
+  gemini:
+    model: models/text-embedding-004
+
+community:
+  # Tinh thần Microsoft GraphRAG: detect community theo tầng, summarize từng level.
+  algorithm: hierarchical_leiden_or_recursive_fallback
+  max_levels: 3
+  min_community_size: 3
+  max_cluster_size: 80
+
+retrieval:
+  # False để mỗi câu hỏi chỉ gọi Gemini 1 lần khi trả lời.
+  # Bật true sẽ tốn thêm 1 request Gemini cho query decomposition.
+  use_llm_query_understanding: false
+  max_query_variants: 6
+  top_k_communities: 5
+  top_k_chunks: 8
+  top_k_entities: 10
+  top_k_entity_linked_chunks: 10
+  graph_expand_depth: 2
+  graph_expand_limit: 30
+  final_context_chunks: 10
+
+logging:
+  level: INFO
+  file: data/output/pipeline.log

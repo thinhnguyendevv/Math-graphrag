@@ -1,0 +1,8 @@
+{
+  "name": "Remix: GraphRAG Knowledge Explorer",
+  "description": "Ứng dụng hỏi đáp thông minh kết hợp mô hình ngôn ngữ lớn (LLM) và đồ thị tri thức (Knowledge Graph) sử dụng công nghệ GraphRAG tiên tiến.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
